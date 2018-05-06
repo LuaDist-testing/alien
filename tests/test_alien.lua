@@ -1,32 +1,29 @@
-
-pcall(require, "luarocks.require")
 require "alien"
-require "alien.struct"
 
-local dll = alien.alientest
+local dll = alien.load "alientest"
 
 do
   io.write(".")
-  local f = dll._testfunc_i_bhilfd
-  f:types("int", "byte", "short", "int", "long",  "float", "double")
-  local result = f(string.byte("x"), 1, 3, 4, 5, 6)
-  assert(result == 139)
+  local f = dll._testfunc_i_bhilpfdll
+  f:types("int", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong")
+  local result = f(string.byte("x"), 1, 3, 4, 5, 6, 7, 8)
+  assert(result == 154)
 end
 
 do
   io.write(".")
-  local f = dll._testfunc_i_bhilfd
-  f:types{ ret = "int", "byte", "short", "int", "long",  "float", "double" }
-  local result = f(string.byte("x"), 1, 3, 4, 5, 6)
-  assert(result == 139)
+  local f = dll._testfunc_i_bhilpfdll
+  f:types{ ret = "int", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong" }
+  local result = f(string.byte("x"), 1, 3, 4, 5, 6, 7, 8)
+  assert(result == 154)
 end
 
 do
   io.write(".")
-  local f = dll._testfunc_i_bhilfd
-  f:types{ "byte", "short", "int", "long",  "float", "double" }
-  local result = f(string.byte("x"), 1, 3, 4, 5, 6)
-  assert(result == 139)
+  local f = dll._testfunc_i_bhilpfdll
+  f:types{ "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong" }
+  local result = f(string.byte("x"), 1, 3, 4, 5, 6, 7, 8)
+  assert(result == 154)
 end
 
 do
@@ -206,37 +203,37 @@ end
 
 do
   io.write(".")
-  local f = dll._testfunc_i_bhilfd
-  f:types("int", "byte", "short", "int", "long", "float", "double")
-  local result = f(1, 2, 3, 4, 5, 6)
-  assert(result == 21)
-  local result = f(-1, -2, -3, -4, -5, -6)
-  assert(result == -21)
-  f:types("short", "byte", "short", "int", "long", "float", "double")
-  local result = f(1, 2, 3, 4, 5, 6)
-  assert(result == 21)
-  local result = f(1, 2, 3, 0x10004, 5.0, 6.0)
-  assert(result == 21)
+  local f = dll._testfunc_i_bhilpfdll
+  f:types("int", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong")
+  local result = f(1, 2, 3, 4, 5, 6, 7, 8)
+  assert(result == 36)
+  local result = f(-1, -2, -3, -4, -5, -6, -7, -8)
+  assert(result == -36)
+  f:types("short", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong")
+  local result = f(1, 2, 3, 4, 5, 6, 7, 8)
+  assert(result == 36)
+  local result = f(1, 2, 3, 0x10004, 5, 6.0, 7.0, 8)
+  assert(result == 36)
 end
 
 do
   io.write(".")
-  local f = dll._testfunc_f_bhilfd
-  f:types("float", "byte", "short", "int", "long", "float", "double")
-  local result = f(1, 2, 3, 4, 5.0, 6.0)
-  assert(result == 21)
-  local result = f(-1, -2, -3, -4, -5, -6)
-  assert(result == -21)
+  local f = dll._testfunc_f_bhilpfdll
+  f:types("float", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong")
+  local result = f(1, 2, 3, 4, 5, 6.0, 7.0, 8)
+  assert(result == 36)
+  local result = f(-1, -2, -3, -4, -5, -6, -7, -8)
+  assert(result == -36)
 end
 
 do
   io.write(".")
-  local f = dll._testfunc_d_bhilfd
-  f:types("double", "byte", "short", "int", "long", "float", "double")
-  local result = f(1, 2, 3, 4, 5.0, 6.0)
-  assert(result == 21)
-  local result = f(-1, -2, -3, -4, -5, -6)
-  assert(result == -21)
+  local f = dll._testfunc_d_bhilpfdll
+  f:types("double", "byte", "short", "int", "long", "ptrdiff_t", "float", "double", "longlong")
+  local result = f(1, 2, 3, 4, 5, 6.0, 7.0, 8)
+  assert(result == 36)
+  local result = f(-1, -2, -3, -4, -5, -6, -7, -8)
+  assert(result == -36)
 end
 
 do
@@ -334,6 +331,11 @@ do
 end
 
 local types = { "char", "short", "int", "long" }
+
+do
+  io.write(".")
+  alien.buffer()
+end
 
 for _, t in ipairs(types) do
   local buf = alien.buffer(alien.sizeof(t))
@@ -468,6 +470,29 @@ end
 
 do
   io.write(".")
+  local buf = alien.buffer(4)
+  buf:realloc(8)
+  assert(buf.size == 8)
+end
+
+io.write(".")
+for _, t in ipairs(types) do
+  local arr = alien.array(t, 4)
+  local size = arr.size
+  local newlen = 15
+  arr:realloc(newlen)
+  assert(size == arr.size)
+  assert(arr.length == newlen)
+  for i = 1, newlen do
+    arr[i] = i*2
+  end
+  for i = 1, newlen do
+    assert(arr[i] == i*2)
+  end
+end
+
+do
+  io.write(".")
   local rect = alien.defstruct{
     { "left", "long" },
     { "top", "long" },
@@ -538,8 +563,6 @@ end
 
 do
   io.write(".")
-   local struct = alien.struct
-
    local buf = alien.buffer('123456')
    assert(alien.buffer(buf:topointer(3)):tostring(3,2)=='456')
 
@@ -549,24 +572,24 @@ do
    local S = '>ipbph'
    local ba = alien.buffer('a\0')
    local bb = alien.buffer('b\0')
-   local s = struct.pack(S,1,ba,2,bb,3)
+   local s = alien.pack(S,1,ba,2,bb,3)
    local buf = alien.buffer(s)
-   local one,pba,two,pbb,three = struct.unpack(S,buf,struct.size(S))
+   local one,pba,two,pbb,three = alien.unpack(S,buf,alien.size(S))
    assert(one==1) assert(two==2) assert(three==3)
    assert(alien.buffer(pba):tostring()=='a')
    assert(alien.tostring(pbb)=='b')
 
-   local pbb,three = struct.unpack('>ph',buf,struct.size(S),struct.offset(S,4))
+   local pbb,three = alien.unpack('>ph',buf,alien.size(S),alien.offset(S,4))
    assert(alien.buffer(pbb):tostring()=='b')
    assert(three==3)
 
-   --buf:set(struct.offset(S,4),struct.pack('p',ba))
-   --assert(alien.buffer(struct.unpack('p',buf,struct.size(S),struct.offset(S,4))):tostring()=='a')
+   --buf:set(alien.offset(S,4),alien.pack('p',ba))
+   --assert(alien.buffer(alien.unpack('p',buf,alien.size(S),alien.offset(S,4))):tostring()=='a')
 
-   assert(struct.size('p')==alien.sizeof("pointer"))
-   assert(struct.offset(S,1)==1)
-   assert(struct.offset(S,4)==6+alien.sizeof("pointer"))
-   assert(struct.offset(S,alien.sizeof("pointer")+2)==struct.size(S)+1)
+   assert(alien.size('p')==alien.sizeof("pointer"))
+   assert(alien.offset(S,1)==1)
+   assert(alien.offset(S,4)==6+alien.sizeof("pointer"))
+   assert(alien.offset(S,alien.sizeof("pointer")+2)==alien.size(S)+1)
 end
 
 local maxushort = 2^(8*alien.sizeof("ushort"))-1
@@ -625,4 +648,4 @@ do
   dll = alien.alientest
 end
 
-print()
+print("\ntests completed OK!")
