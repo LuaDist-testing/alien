@@ -2,7 +2,7 @@
 
 package = "alien"
 
-version = "0.4.1-1"
+version = "0.5.0-1"
 
 description = {
   summary = "Lua->C FFI",
@@ -18,12 +18,12 @@ dependencies = { }
 
 -- LuaDist source
 source = {
-  tag = "0.4.1-1",
+  tag = "0.5.0-1",
   url = "git://github.com/LuaDist-testing/alien.git"
 }
 -- Original source
 -- source = {
---    url = "http://alien.luaforge.net/alien-0.4.1.tar.gz"
+--    url = "http://alien.luaforge.net/alien-0.5.0.tar.gz"
 -- }
 
 build = {
@@ -38,7 +38,7 @@ build = {
      linux = {
        	build_variables = {
          LIB_OPTION = "-shared",
-         CFLAGS = '$(CFLAGS) -I$(LUA_INCDIR) -DLINUX',
+         CFLAGS = '$(CFLAGS) -I$(LUA_INCDIR) -DLINUX -fno-stack-protector',
 	 LIB_EXT = '.so'
        	},
      },
