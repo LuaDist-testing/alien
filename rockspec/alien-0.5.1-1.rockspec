@@ -1,8 +1,6 @@
--- This file was automatically generated for the LuaDist project.
+package = "Alien"
 
-package = "alien"
-
-version = "0.5.0-1"
+version = "0.5.1-1"
 
 description = {
   summary = "Lua->C FFI",
@@ -16,15 +14,9 @@ description = {
 
 dependencies = { }
 
--- LuaDist source
 source = {
-  tag = "0.5.0-1",
-  url = "git://github.com/LuaDist-testing/alien.git"
+   url = "http://cloud.github.com/downloads/alien/alien-0.5.1.tar.gz"
 }
--- Original source
--- source = {
---    url = "http://alien.luaforge.net/alien-0.5.0.tar.gz"
--- }
 
 build = {
    type = "make",

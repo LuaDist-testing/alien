@@ -1,13 +1,26 @@
-<h1>Alien &ndash; Pure Lua extensions</h1>
+<h1>Alien - Pure Lua extensions</h1>
 
 <h2>Status</h2>
 
-<p>This is Alien version 0.5.0.</p>
+<p>This is Alien version 0.5.1.</p>
 
 <h2>Changelog</h2>
 
 <ul>
-<li>0.5.0
+<li><p>0.5.1</p>
+
+<ul>
+<li>bugfix release</li>
+<li>support for Lua 5.2</li>
+<li>per-library function cache, instead of global (can load
+two functions with the same name from different libraries)</li>
+<li>unloading of libraries if they are not being used</li>
+<li>updated alien.struct to current struct.c from Roberto</li>
+<li>updated libffi version to 3.0.9</li>
+<li>updated Windows libffi to reflect ctypes 1.0.2, add Win64 support</li>
+</ul>
+</li>
+<li><p>0.5.0</p>
 
 <ul>
 <li>new functions alien.memcpy and alien.memset</li>
@@ -31,7 +44,7 @@
 <li>0.4.0
 
 <ul>
-<li>Windows support &ndash; stdcall ABI, including stdcall callbacks</li>
+<li>Windows support - stdcall ABI, including stdcall callbacks</li>
 <li>alternative syntax for defining types</li>
 <li>mutable buffers, wrapping lightuserdata in a buffer</li>
 <li>alien.to<em>type</em> functions take optional length argument</li>
@@ -44,9 +57,9 @@
 <li>fixed a build bug on Linux ARM</li>
 </ul>
 </li>
-<li>0.3.2 &ndash; fixes callback bug on NX-bit platforms</li>
-<li>0.3.1 &ndash; initial release with libffi</li>
-<li>0.3 &ndash; retracted due to license conflict</li>
+<li>0.3.2 - fixes callback bug on NX-bit platforms</li>
+<li>0.3.1 - initial release with libffi</li>
+<li>0.3 - retracted due to license conflict</li>
 </ul>
 
 
