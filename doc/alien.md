@@ -26,13 +26,42 @@ Installing Alien
 The easiest way to install Alien is through
 [LuaRocks](http://luarocks.org). Just do `luarocks install alien`.
 
+Alien is based on libffi. On a GNU/Linux system you should be able
+to install it with your package manager; it is probably called
+something like `libffi-dev` (Debian, Ubuntu etc.) or `libffi-devel`
+(Fedora, CentOS etc.). If your system's package manager does not
+have libffi, or you don't have a package manager, you can get the
+source code from [the libffi project](http://sources.redhat.com/libffi/).
+
 Go to the Alien rock directory to see local copies of this
 documentation, as well as the test suite. If you are in the path of
 the test suite (`tests`) you can run the suite with:
 
     lua -l luarocks.require test_alien.lua
 
-Alien installs one modules, `alien`.
+Alien uses the GNU build system. For detailed instructions on
+installations that do not use LuaRocks, see INSTALL in the 
+distribution. 
+
+For a quick start, if you checked out sources from [Github](http://github.com/mascarenhas/alien) (skip this
+step if you downloaded the .zip in the Downloads section):
+
+  ./bootstrap
+
+Then run:
+
+  ./configure && make [&& make install]
+
+You may need to supply non-default paths (e.g. if you are using a
+system that supports more than one version of Lua). For example, on Debian or Ubuntu:
+
+  CPPFLAGS='-I/usr/include/lua5.1' ./configure --libdir=/usr/local/lib/lua/5.1 --datadir=/usr/local/share/lua$
+
+To run some tests:
+
+  make check
+
+Alien installs one module, `alien`.
 
 Basic Usage
 -----------
